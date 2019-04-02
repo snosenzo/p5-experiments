@@ -1,0 +1,15 @@
+{
+  "name": "c-s_sketches",
+  "version": "1.0.0",
+  "description": "canvas sketch p5 sketches",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sam Nosenzo",
+  "license": "ISC",
+  "dependencies": {
+    "canvas-sketch": "^0.2.0",
+    "p5": "^0.6.1"
+  }
+}
