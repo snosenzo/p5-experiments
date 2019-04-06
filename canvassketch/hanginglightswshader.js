@@ -30,8 +30,8 @@ const sketch = ({ p5 }) => {
       setup(p5, cWidth, cHeight);
     }
   });
-  return ({ p5, width, height, time }) => {
-    draw(p5, width, height, time);
+  return ({ p5, width, height, time, playhead }) => {
+    draw(p5, width, height, time, playhead);
   };
 };
 function preload(p5) {
@@ -59,11 +59,10 @@ function setup(p5, width, height) {
   // bloomPass.noFill();
 }
 
-function draw(p5, width, height, time) {
+function draw(p5, width, height, time, playhead) {
   orig.background(50);
   lights.forEach(light => {
-    light.update();
-    light.display(orig);
+    light.display(orig, playhead);
   });
   rain(orig, 300);
   droplets = droplets.filter(drop => {
@@ -74,13 +73,13 @@ function draw(p5, width, height, time) {
   pass1.shader(blurH);
   blurH.setUniform("tex0", orig);
   blurH.setUniform("texelSize", [1.0 / width, 1.0 / height]);
-  blurH.setUniform("direction", [1.0, 0.0]);
+  blurH.setUniform("direction", [0.0, 1.0]);
   pass1.rect(0, 0, width, height);
 
   pass2.shader(blurV);
   blurV.setUniform("tex0", pass1);
   blurV.setUniform("texelSize", [1.0 / width, 1.0 / height]);
-  blurV.setUniform("direction", [0.0, 1]);
+  blurV.setUniform("direction", [0.0, 1.0]);
 
   pass2.rect(0, 0, width, height);
   bloomPass.shader(bloom);
@@ -97,7 +96,7 @@ function rain(graphics, amt) {
   graphics.strokeWeight(1);
   for (let i = 0; i < amt; i++) {
     const pos = new p5.Vector(Math.random() * cWidth, Math.random() * cHeight);
-    graphics.line(pos.x, pos.y, pos.x, pos.y + Math.random() * 8);
+    graphics.line(pos.x, pos.y, pos.x, pos.y + Math.random() * 20);
   }
 }
 
@@ -154,33 +153,43 @@ class Light {
     this.pos2 = vec2;
     this.depth = Math.random(); // larger number closer
     this.length = p5.Vector.sub(vec1, vec2).mag();
-    this.lowerPoint = vec1.y < vec2.y ? vec2 : vec1;
+    this.lowerPointIsPos1 = vec1.y > vec2.y;
+    this.thetaOffset = Math.random() * 1000000;
+    this.swayAmp = Math.random() * 10;
   }
 
-  update() {
-    if (Math.random() > 0.99)
-      droplets.push(
-        new Droplet(this.lowerPoint.x, this.lowerPoint.y, this.depth)
-      );
-  }
+  display(graphics, playhead) {
+    const swayPos1 = graphics.createVector(
+      this.pos1.x +
+        this.swayAmp * Math.sin(playhead * Math.PI * 2 + this.thetaOffset),
+      this.pos1.y
+    );
 
-  display(graphics) {
+    const swayPos2 = graphics.createVector(
+      this.pos2.x +
+        this.swayAmp * Math.sin(playhead * Math.PI * 2 + this.thetaOffset),
+      this.pos2.y
+    );
+    if (Math.random() > 0.99) {
+      const lowerPoint = this.lowerPointIsPos1 ? swayPos1 : swayPos2;
+      droplets.push(new Droplet(lowerPoint.x, lowerPoint.y, this.depth));
+    }
     graphics.stroke(0, 0.75 * 255);
     graphics.strokeWeight(this.depth * 2);
     graphics.strokeCap(graphics.SQUARE);
-    graphics.line(this.pos1.x, this.pos1.y, this.pos1.x, 0);
-    graphics.line(this.pos2.x, this.pos2.y, this.pos2.x, 0);
+    graphics.line(swayPos1.x, swayPos1.y, this.pos1.x, 0);
+    graphics.line(swayPos2.x, swayPos2.y, this.pos2.x, 0);
     graphics.stroke(0, 50 * this.depth * 205);
     const lightThickness = this.depth * 5;
     graphics.strokeWeight(lightThickness);
     graphics.line(
-      this.pos1.x,
-      this.pos1.y - lightThickness * 0.85,
-      this.pos2.x,
-      this.pos2.y - lightThickness * 0.85
+      swayPos1.x,
+      swayPos1.y - lightThickness * 0.85,
+      swayPos2.x,
+      swayPos2.y - lightThickness * 0.85
     );
     graphics.stroke(255, 232, 150);
-    graphics.line(this.pos1.x, this.pos1.y, this.pos2.x, this.pos2.y);
+    graphics.line(swayPos1.x, swayPos1.y, swayPos2.x, swayPos2.y);
   }
 }
 const gravity = 0.1;
