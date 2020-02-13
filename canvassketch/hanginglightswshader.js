@@ -2,7 +2,7 @@ const canvasSketch = require("canvas-sketch");
 const p5 = require("p5");
 let noise;
 let map;
-// import { bloomFrag, blurFrag, baseVert } from "./utils/shaders";
+import { bloomFrag, blurFrag, baseVert } from "./utils/shaders";
 // new p5();
 const cWidth = 1024;
 const cHeight = 1024;
@@ -37,9 +37,9 @@ const sketch = ({ p5 }) => {
 function preload(p5) {
   noise = p5.noise;
   map = p5.map;
-  blurH = p5.loadShader("shaders/base.vert", "shaders/blur.frag");
-  blurV = p5.loadShader("shaders/base.vert", "shaders/blur.frag");
-  bloom = p5.loadShader("shaders/base.vert", "shaders/bloom.frag");
+  blurH = p5.loadShader("./shaders/base.vert", "./shaders/blur.frag");
+  blurV = p5.loadShader("./shaders/base.vert", "./shaders/blur.frag");
+  bloom = p5.loadShader("./shaders/base.vert", "./shaders/bloom.frag");
 }
 function setup(p5, width, height) {
   orig = p5.createGraphics(width, height);
@@ -113,12 +113,12 @@ function addRandomLight() {
 function checkXInBounds(x) {
   return x > 0 && x < cWidth;
 }
-function addNoiseLineLight(x) {
+function addNoiseLineLight() {
   const { vec1, vec2 } = randomPointsOnNoiseLineApart(
     Math.random() * cWidth,
     Math.random() * 100,
-    cWidth / 2,
-    cHeight / 2 - cWidth / 3
+    cHeight,
+    0
   );
   lights.push(new Light(vec1, vec2));
 }

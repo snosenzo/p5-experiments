@@ -232,7 +232,14 @@ class Chaser {
     // strokeWeight(strokeSize);
     ellipseMode(CENTER);
     if (pastLoc) {
-      lerpPointWithStroke(pastLoc, loc, lastStroke, strokeSize, 20, rectStroke);
+      lerpPointWithStroke(
+        pastLoc,
+        loc,
+        lastStroke,
+        strokeSize,
+        20,
+        diagonalLineNoiseStroke
+      );
     }
     this.lastStroke = strokeSize;
     this.pastLoc = new createVector(this.loc.x, this.loc.y);

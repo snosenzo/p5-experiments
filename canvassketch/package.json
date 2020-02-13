@@ -9,7 +9,11 @@
   "author": "Sam Nosenzo",
   "license": "ISC",
   "dependencies": {
+    "@thi.ng/geom-isec": "^0.3.10",
+    "@thi.ng/geom-poly-utils": "^0.1.28",
+    "@thi.ng/vectors": "^4.0.3",
     "canvas-sketch": "^0.2.0",
+    "canvas-sketch-util": "^1.10.0",
     "p5": "^0.6.1"
   }
 }

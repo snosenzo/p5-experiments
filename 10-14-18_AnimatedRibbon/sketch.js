@@ -1,5 +1,5 @@
-var numPtsPerConnect = 25;
-var numCps = 20;
+var numPtsPerConnect = 10;
+var numCps = 10;
 let cps = [];
 let cpt;
 function setup() {
