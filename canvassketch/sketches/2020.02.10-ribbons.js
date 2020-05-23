@@ -6,11 +6,11 @@ const { centroid: centroidFunc } = require("@thi.ng/geom-poly-utils");
 const vec = require("@thi.ng/vectors");
 const {
   gridCallback,
-  sqGridPaddingCallback
+  sqGridPaddingCallback,
 } = require("../utils/formatting-callbacks.js");
 
 let Vector = null;
-const preload = p => {
+const preload = (p) => {
   // You can use p5.loadImage() here, etc...
 
   Vector = p5.Vector;
@@ -26,7 +26,7 @@ const settings = {
   // Turn on a render loop
   dimensions: "Letter",
   bleed: 25,
-  animate: false
+  animate: false,
 };
 let width = 0;
 let height = 0;
@@ -47,24 +47,24 @@ canvasSketch(({ p5, width: w, height: h }) => {
         data: pathsToSVG(polylines, {
           width,
           height,
-          units: "px"
+          units: "px",
         }),
-        extension: ".svg"
-      }
+        extension: ".svg",
+      },
     ];
   };
 }, settings);
 
-const bounds = ptArray => {
+const bounds = (ptArray) => {
   const min = {
     x: Number.MAX_SAFE_INTEGER,
-    y: Number.MAX_SAFE_INTEGER
+    y: Number.MAX_SAFE_INTEGER,
   };
   const max = {
     x: -1 * Number.MAX_SAFE_INTEGER,
-    y: -1 * Number.MAX_SAFE_INTEGER
+    y: -1 * Number.MAX_SAFE_INTEGER,
   };
-  ptArray.forEach(pt => {
+  ptArray.forEach((pt) => {
     if (pt[0] < min.x) min.x = pt[0];
     if (pt[0] > max.x) max.x = pt[0];
     if (pt[1] < min.y) min.y = pt[1];
@@ -72,7 +72,7 @@ const bounds = ptArray => {
   });
   return {
     min,
-    max
+    max,
   };
 };
 
@@ -94,16 +94,16 @@ function random(...args) {
 function randomVectorInBoxWithMargin(x, y, width, height, marginX, marginY) {
   return [
     random(x + marginX, x + marginX + width),
-    random(y + marginY, y + marginY + height)
+    random(y + marginY, y + marginY + height),
   ];
 }
 
-const numBoxes = 1;
+const numShapes = 3;
 
 function setup(p5) {
   p5.background(255);
   let z = 0;
-  for (let i = 0; i < numBoxes; i++) {
+  for (let i = 0; i < numShapes; i++) {
     boxes.push(
       getRibbonShape(
         Math.PI * 5 * p5.noise((i / width) * 1.5, (i + 10 / width) * 1.5),
@@ -115,7 +115,7 @@ function setup(p5) {
   }
 }
 function draw(p5) {
-  boxes.forEach(box => {
+  boxes.forEach((box) => {
     box.draw(p5);
     polylines.push(box.getFillLines(box.lineFillSpacing, box.angle, p5));
   });
@@ -124,7 +124,7 @@ function draw(p5) {
 function drawShapeOutline(p5, shape) {
   p5.fill(0, 255, 0);
   p5.beginShape(p5.FILL);
-  shape.forEach(pt => {
+  shape.forEach((pt) => {
     p5.vertex(pt[0], pt[1]);
   });
   p5.endShape();
@@ -132,7 +132,7 @@ function drawShapeOutline(p5, shape) {
 
 function drawShapeFillLines(p5, lines) {
   p5.strokeWeight(1);
-  lines.forEach(ln => {
+  lines.forEach((ln) => {
     if (ln[0] && ln[1]) p5.line(ln[0][0], ln[0][1], ln[1][0], ln[1][1]);
     else console.log(ln);
   });
@@ -161,7 +161,7 @@ class Shape {
   }
 
   getTransformedShape(angle) {
-    return this.path.map(pt => {
+    return this.path.map((pt) => {
       let finPt = [];
       vec.sub(finPt, pt, this.centroid);
       vec.rotate(finPt, finPt, angle);
@@ -169,8 +169,8 @@ class Shape {
     });
   }
   getRevertedLines(lines, angle, rotCenter) {
-    return lines.map(pts => {
-      return pts.map(pt => {
+    return lines.map((pts) => {
+      return pts.map((pt) => {
         let finPt = [0, 0];
         vec.rotate(finPt, pt, -angle);
         vec.add(finPt, this.centroid, finPt);
@@ -250,18 +250,18 @@ function getOuterMostConnections(cp1, cp2) {
   return [
     [
       [cp1.pts[0].x, cp1.pts[0].y],
-      [cp2.pts[0].x, cp2.pts[0].y]
+      [cp2.pts[0].x, cp2.pts[0].y],
     ],
     [
       [cp1.pts[cp1.pts.length - 1].x, cp1.pts[cp1.pts.length - 1].y],
-      [cp2.pts[cp2.pts.length - 1].x, cp2.pts[cp2.pts.length - 1].y]
-    ]
+      [cp2.pts[cp2.pts.length - 1].x, cp2.pts[cp2.pts.length - 1].y],
+    ],
   ];
 }
 function getOutsidePoints(cp1) {
   return [
     [cp1.pts[0].x, cp1.pts[0].y],
-    [cp1.pts[cp1.pts.length - 1].x, cp1.pts[cp1.pts.length - 1].y]
+    [cp1.pts[cp1.pts.length - 1].x, cp1.pts[cp1.pts.length - 1].y],
   ];
 }
 function initCPs(p5) {
