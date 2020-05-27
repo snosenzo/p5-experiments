@@ -18,3 +18,20 @@ Noise + ellipsoids is really what this is. Just wanted to see what odd looking s
 ### Ribbons
 
 I'd been doing some sketches of line-filled ribbons and was getting excited at the prospect. I was able to adapt an old, 'physics-based' ribbon sketch from a year & a half ago to create the outline of the ribbon.
+I like that the shapes have a flow to them but the form itself is a little to hard for me to control withouth reworking the ribbon.
+I think it would look really nice if I could use/make an actual bezier ribbon.
+
+### Noise Lines In box
+
+Thought it might be interesting to have some layered noise lines in a rectangle, but didn't like it as much as i thought i would once i printed it out.
+I think I did a good job at crafting the wave itself. I think it looks pretty ocean-y. Defintily could use the technique of applying a noise vector multiple times to create this kind of noise wave again.
+I'm interested in maybe seeing what it would look like when applied to different polylines.
+This is the first kind of vector (svg) vertex, shader that i've really dipped my hands in i guess.
+Excited at the possibilities of it.
+
+## Next Possibilities:
+
+- apply the noise vertex 'shader' that I'm made to different shapes (ellipsoids)
+  - explore creating and filling shapes at each iteration of the deformation?
+- make a function that applies a function to a line (startLoc, endLoc) to warp the points between one and the other
+-

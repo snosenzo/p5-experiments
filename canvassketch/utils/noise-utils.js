@@ -1,11 +1,11 @@
-function sqVecFromNoise(x, y, p5) {
+export function sqVecFromNoise(x, y, p5) {
   var dirAngle = Math.floor(
     map(p5.noise(x / noiseScale, y / noiseScale, nz), 0, 1, 0, 8)
   );
   dirAngle = dirAngle * ((Math.PI * 2) / 8) * 2 - Math.PI * 2;
   return p5.Vector.fromAngle(dirAngle);
 }
-function vecFromNoise(x, y, p5) {
+export function vecFromNoise(x, y, p5, noiseScale = 150.0, nz = 0) {
   var dirAngle = p5.map(
     p5.noise(x / noiseScale, y / noiseScale, nz),
     0,
@@ -13,9 +13,9 @@ function vecFromNoise(x, y, p5) {
     -(Math.PI * 2),
     Math.PI * 2
   );
-  return p5.Vector.fromAngle(dirAngle);
+  return p5.createVector(Math.cos(dirAngle), Math.sin(dirAngle));
 }
-function curlNoise(x, y, p5) {
+export function curlNoise(x, y, p5, noiseScale = 150.0, nz = 0) {
   const eps = 1.0 / noiseScale;
   let n1, n2, a, b;
   x = x / noiseScale;
@@ -33,7 +33,7 @@ function curlNoise(x, y, p5) {
   curl.normalize();
   return curl;
 }
-function curlNoiseFloored(x, y, p5) {
+export function curlNoiseFloored(x, y, p5, noiseScale = 150.0) {
   const eps = 1.0 / noiseScale;
   noiseDetail(2, 0.5);
   let n1, n2, a, b;

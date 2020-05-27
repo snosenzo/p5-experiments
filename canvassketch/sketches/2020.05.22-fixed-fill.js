@@ -3,7 +3,10 @@ const p5 = require("p5");
 const { pathsToSVG } = require("canvas-sketch-util/penplot");
 const { CPTrail } = require("./ribbon");
 const { Shape } = require("./shape");
+const { getCoordBounds } = require("./calc-utils");
+const { drawShapeOutline, drawShapeFillLines } = require("./draw-utils");
 const vec = require("@thi.ng/vectors");
+const isec = require("@thi.ng/geom-isec");
 const {
   gridCallback,
   sqGridPaddingCallback,
@@ -29,7 +32,7 @@ const settings = {
 };
 width = 0;
 height = 0;
-let boxes = [];
+let shapes = [];
 
 canvasSketch(({ p5, width: w, height: h }) => {
   // Return a renderer, which is like p5.js 'draw' function
@@ -53,13 +56,13 @@ canvasSketch(({ p5, width: w, height: h }) => {
     ];
   };
 }, settings);
-const numShapes = 3;
+const numShapes = 1;
 
 function setup(p5) {
   p5.background(255);
   let z = 0;
   for (let i = 0; i < numShapes; i++) {
-    boxes.push(
+    shapes.push(
       getRibbonShape(
         Math.PI * 5 * p5.noise((i / width) * 1.5, (i + 10 / width) * 1.5),
         2.2, //+ 8 * p5.noise((i / width) * 1.5, (i / width) * 1.5),
@@ -71,7 +74,8 @@ function setup(p5) {
 }
 
 function draw(p5) {
-  boxes.forEach((box) => {
+  shapes.forEach((box) => {
+    // box.drawOutline(p5);
     box.draw(p5);
     polylines.push(box.getFillLines(box.lineFillSpacing, box.angle, p5));
   });
@@ -80,12 +84,12 @@ function draw(p5) {
 function getRibbonShape(angle, lineFillSpacing, p5) {
   const cpt = new CPTrail(p5);
   const path = [];
-  for (let i = 0; i < 600; i++) {
-    console.log(i);
+  for (let i = 0; i < 15000; i++) {
+    // console.log(i);
     cpt.update();
   }
   // cpt.display(p5);
   path.push(...cpt.getOutline());
   path.push(path[0]);
-  return new Shape(path, angle, lineFillSpacing);
+  return new FixedShape(path, angle, lineFillSpacing);
 }
