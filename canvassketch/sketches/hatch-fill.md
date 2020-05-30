@@ -34,4 +34,4 @@ Excited at the possibilities of it.
 - apply the noise vertex 'shader' that I'm made to different shapes (ellipsoids)
   - explore creating and filling shapes at each iteration of the deformation?
 - make a function that applies a function to a line (startLoc, endLoc) to warp the points between one and the other
--
+- actually figure out how to import shapes and warp them

@@ -186,7 +186,6 @@ const noiseLinesShapesInBox = (p5, startLoc, endLoc, spacing = 50) => {
       })
     );
   }
-  console.log(lines.length);
   const shapes = [];
   for (let i = 0; i < lines.length - 1; i++) {
     const shapeOutline = [];
